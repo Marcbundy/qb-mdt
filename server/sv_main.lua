@@ -61,7 +61,7 @@ CheckIfValueInTable = function(table, item)
 end
 
 LoadQBCoreVersion = function()
-    RPC.register("erp-mdt:isAdmin", function()
+    RPC.register("qb-mdt:isAdmin", function()
         return isAdmin(source)
     end)
     GetFullNameFromIdentifier = function(citizenid)
@@ -174,7 +174,7 @@ LoadQBCoreVersion = function()
         end
         return false
     end
-    RPC.register("erp-mdt:getInfo", function()
+    RPC.register("qb-mdt:getInfo", function()
         local xPlayer = QBCore.Functions.GetPlayer(source)
         return {firstname = xPlayer.PlayerData.charinfo.firstname, lastname = xPlayer.PlayerData.charinfo.lastname}
     end)
@@ -187,18 +187,18 @@ LoadQBCoreVersion = function()
                     local jobLabel = xPlayer.PlayerData.charinfo.firstname
                     local lastname = xPlayer.PlayerData.charinfo.lastname
                     local firstname = xPlayer.PlayerData.charinfo.firstname
-                    TriggerClientEvent("erp-mdt:open", source, job, jobLabel, lastname, firstname)
+                    TriggerClientEvent("qb-mdt:open", source, job, jobLabel, lastname, firstname)
                 end
             end
         end
     end)
-    RPC.register("erp-mdt:dashboardbulletin", function()
+    RPC.register("qb-mdt:dashboardbulletin", function()
         return GetAllBulletinData()
     end)
-    RPC.register("erp-mdt:dashboardMessages", function()
+    RPC.register("qb-mdt:dashboardMessages", function()
         return GetAllMessages()
     end)
-    RPC.register("erp-mdt:getWarrants", function()
+    RPC.register("qb-mdt:getWarrants", function()
         local WarrantData = {}
         local data = SQL("SELECT * FROM mdt_incidents", {})
         for index = 1, #data, 1 do
@@ -217,7 +217,7 @@ LoadQBCoreVersion = function()
         end
         return WarrantData
     end)
-    RPC.register("erp-mdt:getActiveLSPD", function()
+    RPC.register("qb-mdt:getActiveLSPD", function()
         local ActiveLSPD = {}
         for index, player in pairs(QBCore.Functions.GetPlayers()) do
             local xPlayer = QBCore.Functions.GetPlayer(player)
@@ -226,14 +226,14 @@ LoadQBCoreVersion = function()
                     duty = GetPlayerDutyStatus(xPlayer.PlayerData.source),
                     cid = xPlayer.PlayerData.citizenid,
                     name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname,
-                    callsign = GetResourceKvpString("erp-mdt:callsign-"..xPlayer.PlayerData.citizenid),
+                    callsign = GetResourceKvpString("qb-mdt:callsign-"..xPlayer.PlayerData.citizenid),
                     radio = GetPlayerRadio(xPlayer.PlayerData.source)
                 })
             end
         end
         return ActiveLSPD
     end)
-    RPC.register("erp-mdt:getActiveEMS", function()
+    RPC.register("qb-mdt:getActiveEMS", function()
         local ActiveEMS = {}
         for index, player in pairs(QBCore.Functions.GetPlayers()) do
             local xPlayer = QBCore.Functions.GetPlayer(player)
@@ -242,7 +242,7 @@ LoadQBCoreVersion = function()
                     duty = GetPlayerDutyStatus(xPlayer.PlayerData.source),
                     cid = xPlayer.PlayerData.citizenid,
                     name = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname,
-                    callsign = GetResourceKvpString("erp-mdt:callsign-"..xPlayer.PlayerData.citizenid),
+                    callsign = GetResourceKvpString("qb-mdt:callsign-"..xPlayer.PlayerData.citizenid),
                     radio = GetPlayerRadio(xPlayer.PlayerData.source)
                 })
             end
@@ -297,7 +297,7 @@ LoadQBCoreVersion = function()
         end
         return Weapons
     end
-    RPC.register("erp-mdt:getProfileData", function(citizenid)
+    RPC.register("qb-mdt:getProfileData", function(citizenid)
         local ReturnData = {}
         local result = SQL('SELECT * FROM '..Config["CoreSettings"]["QBCore"]["Players_Table"]..' WHERE citizenid = @citizenid', {['@citizenid'] = citizenid})
         local CharInfo = json.decode(result[1].charinfo)
@@ -322,17 +322,17 @@ LoadQBCoreVersion = function()
         ReturnData.treatments = GetProfileTreatments(result[1].citizenid)
         return ReturnData
     end)
-    RPC.register("erp-mdt:JailPlayer", function(cid, time)
+    RPC.register("qb-mdt:JailPlayer", function(cid, time)
         JailPlayer(source, cid, time)
     end)
-    RPC.register("erp-mdt:saveProfile", function(profilepic, information, cid)
+    RPC.register("qb-mdt:saveProfile", function(profilepic, information, cid)
         SQL("UPDATE "..Config["CoreSettings"]["QBCore"]["Players_Table"].." SET pp = @profilepic, policemdtinfo = @policemdtinfo WHERE citizenid = @citizenid", {
             ['@profilepic'] = profilepic,
             ['@policemdtinfo'] = information, 
             ['@citizenid'] = cid
         })
     end)
-    RPC.register("erp-mdt:addGalleryImg", function(cid, url)
+    RPC.register("qb-mdt:addGalleryImg", function(cid, url)
         SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].." WHERE citizenid = @citizenid", {
             ['@citizenid'] = cid
         }, function(result)
@@ -349,7 +349,7 @@ LoadQBCoreVersion = function()
             })
         end)
     end)
-    RPC.register("erp-mdt:removeGalleryImg", function(cid, url)
+    RPC.register("qb-mdt:removeGalleryImg", function(cid, url)
         SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].." WHERE citizenid = @citizenid", {
             ['@citizenid'] = cid
         }, function(result)
@@ -367,12 +367,12 @@ LoadQBCoreVersion = function()
             })
         end)
     end)
-    RPC.register("erp-mdt:addWeapon", function(cid, serialnumber)
+    RPC.register("qb-mdt:addWeapon", function(cid, serialnumber)
         local xPlayer = QBCore.Functions.GetPlayerByCitizenId(cid)
         local owner = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
         SQL('INSERT INTO mdt_weapons (identifier, serialnumber, owner) VALUES (@identifier, @serialnumber, @owner)', {['@identifier'] = cid, ['@serialnumber'] = serialnumber, ['@owner'] = owner})
     end)
-    RPC.register("erp-mdt:newTag", function(identifier, tag)
+    RPC.register("qb-mdt:newTag", function(identifier, tag)
         SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].." WHERE citizenid = @citizenid", {
             ['@citizenid'] = identifier
         }, function(result)
@@ -389,7 +389,7 @@ LoadQBCoreVersion = function()
             })
         end)
     end)
-    RPC.register("erp-mdt:missingCitizen", function(cid, time)
+    RPC.register("qb-mdt:missingCitizen", function(cid, time)
         local result = SQL('SELECT * FROM '..Config["CoreSettings"]["QBCore"]["Players_Table"]..' WHERE citizenid = @citizenid', {['@citizenid'] = cid})
         if not CheckIfMissing(cid) then 
             SQL('INSERT INTO mdt_missing (identifier, name, date, age, lastseen) VALUES (@identifier, @name, @date, @age, @lastseen)', {
@@ -401,7 +401,7 @@ LoadQBCoreVersion = function()
             })
         end
     end)
-    RPC.register("erp-mdt:removeProfileTag", function(cid, tagtext)
+    RPC.register("qb-mdt:removeProfileTag", function(cid, tagtext)
         SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].." WHERE citizenid = @citizenid", {
             ['@citizenid'] = cid
         }, function(result)
@@ -419,10 +419,10 @@ LoadQBCoreVersion = function()
             })
         end)
     end)
-    RPC.register("erp-mdt:updateLicence", function(type, status, cid)
+    RPC.register("qb-mdt:updateLicence", function(type, status, cid)
         ManageLicenses(cid, type, status)
     end)
-    RPC.register("erp-mdt:deleteBulletin", function(id, time)
+    RPC.register("qb-mdt:deleteBulletin", function(id, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         SQL("DELETE FROM mdt_bulletins WHERE id = @id", {['@id'] = id}, function(isSec)
@@ -430,7 +430,7 @@ LoadQBCoreVersion = function()
             return src, id, xPlayer.PlayerData.job.name
         end)
     end)
-    RPC.register("erp-mdt:newBulletin", function(title, info, time)
+    RPC.register("qb-mdt:newBulletin", function(title, info, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         local Author = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
@@ -447,7 +447,7 @@ LoadQBCoreVersion = function()
             end
         end)
     end)
-    RPC.register("erp-mdt:searchProfile", function(name)
+    RPC.register("qb-mdt:searchProfile", function(name)
         local Matches = {}
         local users = SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].."", {})
         for index = 1, #users, 1 do
@@ -474,7 +474,7 @@ LoadQBCoreVersion = function()
         end
         return Matches
     end)
-    RPC.register("erp-mdt:searchIncidents", function(incident)
+    RPC.register("qb-mdt:searchIncidents", function(incident)
         local Matches = {}
         local incidents = SQL('SELECT * FROM mdt_incidents', {})
         for index = 1, #incidents, 1 do 
@@ -484,7 +484,7 @@ LoadQBCoreVersion = function()
         end
         return Matches
     end)
-    RPC.register("erp-mdt:saveIncident", function(ID, title, information, tags, officers, civilians, evidence, associated, time)
+    RPC.register("qb-mdt:saveIncident", function(ID, title, information, tags, officers, civilians, evidence, associated, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         local result = SQL('SELECT * FROM mdt_incidents WHERE id = @id', {['@id'] = ID})
@@ -519,7 +519,7 @@ LoadQBCoreVersion = function()
             CreateStuffLog("NewIncident", time, xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname)
         end
     end)
-    RPC.register("erp-mdt:getAllIncidents", function()
+    RPC.register("qb-mdt:getAllIncidents", function()
         local Tables = {}
         local results = SQL('SELECT * FROM mdt_incidents', {})
         for index, data in pairs(results) do
@@ -527,7 +527,7 @@ LoadQBCoreVersion = function()
         end
         return Tables
     end)
-    RPC.register("erp-mdt:getIncidentData", function(id)
+    RPC.register("qb-mdt:getIncidentData", function(id)
         local result = SQL('SELECT * FROM mdt_incidents WHERE id = @id', {['@id'] = id})
         local convictions = {}
         local associatedData = json.decode(result[1].associated)
@@ -548,7 +548,7 @@ LoadQBCoreVersion = function()
         end
         return result[1], convictions
     end)
-    RPC.register("erp-mdt:incidentSearchPerson", function(name)
+    RPC.register("qb-mdt:incidentSearchPerson", function(name)
         local Matches = {}
         local users = SQL("SELECT * FROM "..Config["CoreSettings"]["QBCore"]["Players_Table"].."", {})
         for index = 1, #users, 1 do
@@ -569,7 +569,7 @@ LoadQBCoreVersion = function()
         end
         return Matches
     end)
-    RPC.register("erp-mdt:removeIncidentCriminal", function(cid, incidentId)
+    RPC.register("qb-mdt:removeIncidentCriminal", function(cid, incidentId)
         local result = SQL('SELECT * FROM mdt_incidents WHERE id = @id', {['@id'] = incidentId})
         if result[1] then
             local Table = {}
@@ -584,7 +584,7 @@ LoadQBCoreVersion = function()
             })
         end
     end)
-    RPC.register("erp-mdt:getPenalCode", function()
+    RPC.register("qb-mdt:getPenalCode", function()
         local xPlayer = QBCore.Functions.GetPlayer(source)
         for index, job in pairs(Config["PoliceJobs"]) do
             for index2, job2 in pairs(Config["EMSJobs"]) do
@@ -596,7 +596,7 @@ LoadQBCoreVersion = function()
             end
         end
     end)
-    RPC.register("erp-mdt:searchBolos", function(searchVal)
+    RPC.register("qb-mdt:searchBolos", function(searchVal)
         local Matches = {}
         local BolosData = SQL("SELECT * FROM mdt_bolos", {})
         for index = 1, #BolosData, 1 do
@@ -606,7 +606,7 @@ LoadQBCoreVersion = function()
         end
         return Matches
     end)
-    RPC.register("erp-mdt:getAllBolos", function()
+    RPC.register("qb-mdt:getAllBolos", function()
         local Tables = {}
         local BolosData = SQL("SELECT * FROM mdt_bolos", {})
         for index = 1, #BolosData, 1 do
@@ -614,7 +614,7 @@ LoadQBCoreVersion = function()
         end
         return Tables
     end)
-    RPC.register("erp-mdt:getAllMissing", function()
+    RPC.register("qb-mdt:getAllMissing", function()
         local Tables = {}
         local MissingCitizens = SQL("SELECT * FROM mdt_missing", {})
         for index = 1, #MissingCitizens, 1 do
@@ -623,11 +623,11 @@ LoadQBCoreVersion = function()
         end
         return Tables
     end)
-    RPC.register("erp-mdt:getBoloData", function(id)
+    RPC.register("qb-mdt:getBoloData", function(id)
         local result = SQL('SELECT * FROM mdt_bolos WHERE id = @id', {['@id'] = id})
         return result[1]
     end)
-    RPC.register("erp-mdt:newBolo", function(existing, id, title, plate, owner, individual, detail, tags, gallery, officers, time)
+    RPC.register("qb-mdt:newBolo", function(existing, id, title, plate, owner, individual, detail, tags, gallery, officers, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         if not existing then
@@ -665,30 +665,30 @@ LoadQBCoreVersion = function()
             return id
         end
     end)
-    RPC.register("erp-mdt:deleteBolo", function(id, time)
+    RPC.register("qb-mdt:deleteBolo", function(id, time)
         local xPlayer = QBCore.Functions.GetPlayer(source)
         CreateStuffLog("DeleteBolo", time, xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname)
         SQL("DELETE FROM mdt_bolos WHERE id = @id", {['@id'] = id})
     end)
-    RPC.register("erp-mdt:deleteIncident", function(id, time)
+    RPC.register("qb-mdt:deleteIncident", function(id, time)
         local xPlayer = QBCore.Functions.GetPlayer(source)
         CreateStuffLog("DeleteIncident", time, xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname)
         SQL("DELETE FROM mdt_incidents WHERE id = @id", {['@id'] = id})
     end)
-    RPC.register("erp-mdt:deleteMissing", function(id, time)
+    RPC.register("qb-mdt:deleteMissing", function(id, time)
         local xPlayer = QBCore.Functions.GetPlayer(source)
         CreateStuffLog("DeleteMissing", time, xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname)
         SQL("DELETE FROM mdt_missing WHERE id = @id", {['@id'] = id})
     end)
-    RPC.register("erp-mdt:deleteReport", function(id, time)
+    RPC.register("qb-mdt:deleteReport", function(id, time)
         local xPlayer = QBCore.Functions.GetPlayer(source)
         CreateStuffLog("DeleteReport", time, xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname)
         SQL("DELETE FROM mdt_report WHERE id = @id", {['@id'] = id})
     end)
-    RPC.register("erp-mdt:deleteICU", function(id)
+    RPC.register("qb-mdt:deleteICU", function(id)
         SQL("DELETE FROM mdt_bolos WHERE id = @id", {['@id'] = id})
     end)
-    RPC.register("erp-mdt:getAllReports", function()
+    RPC.register("qb-mdt:getAllReports", function()
         local Tables = {}
         local results = SQL('SELECT * FROM mdt_report', {})
         for index = 1, #results, 1 do
@@ -696,11 +696,11 @@ LoadQBCoreVersion = function()
         end
         return Tables
     end)
-    RPC.register("erp-mdt:getReportData", function(id)
+    RPC.register("qb-mdt:getReportData", function(id)
         local result = SQL('SELECT * FROM mdt_report WHERE id = @id', {['@id'] = id})
         return result[1]
     end)
-    RPC.register("erp-mdt:searchReports", function(name)
+    RPC.register("qb-mdt:searchReports", function(name)
         local Matches = {}
         local ReportsData = SQL('SELECT * FROM mdt_report', {})
         for index = 1, #ReportsData, 1 do
@@ -710,7 +710,7 @@ LoadQBCoreVersion = function()
         end
         return Matches
     end)
-    RPC.register("erp-mdt:newReport", function(existing, id, title, reporttype, detail, tags, gallery, officers, civilians, time)
+    RPC.register("qb-mdt:newReport", function(existing, id, title, reporttype, detail, tags, gallery, officers, civilians, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         if not existing then
@@ -746,7 +746,7 @@ LoadQBCoreVersion = function()
             return id
         end
     end)
-    RPC.register("erp-mdt:searchVehicles", function(name)
+    RPC.register("qb-mdt:searchVehicles", function(name)
         local ReturnData = {}
         local VehiclesData =  SQL('SELECT * FROM '..Config["CoreSettings"]["QBCore"]["OwnedVehicles_Table"]..'', {})
         for index = 1, #VehiclesData, 1 do
@@ -768,7 +768,7 @@ LoadQBCoreVersion = function()
 
         return ReturnData
     end)
-    RPC.register("erp-mdt:searchWeapon", function(name)
+    RPC.register("qb-mdt:searchWeapon", function(name)
         local ReturnData = {}
         local Weapons =  SQL('SELECT * FROM mdt_weapons', {})
         for index = 1, #Weapons, 1 do
@@ -778,14 +778,14 @@ LoadQBCoreVersion = function()
         end
         return ReturnData
     end)
-    RPC.register("erp-mdt:saveMissingInfo", function(id, imageurl, notes)
+    RPC.register("qb-mdt:saveMissingInfo", function(id, imageurl, notes)
         SQL("UPDATE mdt_missing SET image = @image, notes = @notes WHERE id = @id", {
             ['@id'] = id,
             ['@image'] = imageurl, 
             ['@notes'] = notes
         })
     end)
-    RPC.register("erp-mdt:searchMissing", function(name)
+    RPC.register("qb-mdt:searchMissing", function(name)
         local ReturnData = {}
         local Missing =  SQL('SELECT * FROM mdt_missing', {})
         for index = 1, #Missing, 1 do
@@ -796,20 +796,20 @@ LoadQBCoreVersion = function()
         end
         return ReturnData
     end)
-    RPC.register("erp-mdt:getWeaponData", function(serialnumber)
+    RPC.register("qb-mdt:getWeaponData", function(serialnumber)
         local result = SQL('SELECT * FROM mdt_weapons WHERE serialnumber = @serialnumber', {['@serialnumber'] = serialnumber})
         if result[1] then
             return result[1]
         end
     end)
-    RPC.register("erp-mdt:getMissingData", function(id)
+    RPC.register("qb-mdt:getMissingData", function(id)
         local result = SQL('SELECT * FROM mdt_missing WHERE id = @id', {['@id'] = id})
         if result[1] then
             result[1].image = GetPlayerProfilePicture(result[1].identifier)
             return result[1]
         end
     end)
-    RPC.register("erp-mdt:saveWeaponInfo", function(serialnumber, imageurl, brand, type, notes)
+    RPC.register("qb-mdt:saveWeaponInfo", function(serialnumber, imageurl, brand, type, notes)
         SQL("UPDATE mdt_weapons SET image = @image, brand = @brand, type = @type, information = @information WHERE serialnumber = @serialnumber", {
             ['@serialnumber'] = serialnumber,
             ['@image'] = imageurl, 
@@ -818,7 +818,7 @@ LoadQBCoreVersion = function()
             ['@information'] = notes
         })
     end)
-    RPC.register("erp-mdt:getVehicleData", function(plate)
+    RPC.register("qb-mdt:getVehicleData", function(plate)
         local result = SQL('SELECT * FROM '..Config["CoreSettings"]["QBCore"]["OwnedVehicles_Table"]..' WHERE plate = @plate', {['@plate'] = plate})
         if result[1] then
             result[1].bolo = CheckBoloStatus(plate)
@@ -831,7 +831,7 @@ LoadQBCoreVersion = function()
             return result[1]
         end
     end)
-    RPC.register("erp-mdt:saveVehicleInfo", function(plate, imageurl, notes, code5, stolen)
+    RPC.register("qb-mdt:saveVehicleInfo", function(plate, imageurl, notes, code5, stolen)
         local result = SQL('SELECT * FROM mdt_vehicleinfo WHERE plate = @plate', {['@plate'] = plate})
         if result[1] then
             SQL("UPDATE mdt_vehicleinfo SET info = @info, image = @image WHERE plate = @plate", {
@@ -849,7 +849,7 @@ LoadQBCoreVersion = function()
             })
         end
     end)
-    RPC.register("erp-mdt:knownInformation", function(type, status, plate)
+    RPC.register("qb-mdt:knownInformation", function(type, status, plate)
         local result = SQL('SELECT * FROM mdt_vehicleinfo WHERE plate = @plate', {['@plate'] = plate})
         if result[1] then
             if type == "code5" then
@@ -877,25 +877,25 @@ LoadQBCoreVersion = function()
             end
         end
     end)
-    RPC.register("erp-mdt:getAllLogs", function()
+    RPC.register("qb-mdt:getAllLogs", function()
         local result = SQL('SELECT * FROM mdt_logs LIMIT 120', {})
         return result
     end)
-    RPC.register("erp-mdt:toggleDuty", function(cid, status)
+    RPC.register("qb-mdt:toggleDuty", function(cid, status)
         ChangePlayerDuty(cid, status)
     end)
-    RPC.register("erp-mdt:setCallsign", function(cid, newcallsign)
-        SetResourceKvp("erp-mdt:callsign-"..cid, tostring(newcallsign))
-        return GetResourceKvpString("erp-mdt:callsign-"..cid)
+    RPC.register("qb-mdt:setCallsign", function(cid, newcallsign)
+        SetResourceKvp("qb-mdt:callsign-"..cid, tostring(newcallsign))
+        return GetResourceKvpString("qb-mdt:callsign-"..cid)
     end)
-    RPC.register("erp-mdt:setWaypoint", function(callid)
+    RPC.register("qb-mdt:setWaypoint", function(callid)
         return MDTDispatchData[callid]
     end)
     RegisterServerEvent("dispatch:svNotify", function(data)
         calls = calls + 1
         MDTDispatchData[calls] = data
     end)
-    RPC.register("erp-mdt:callDetach", function(callid)
+    RPC.register("qb-mdt:callDetach", function(callid)
         local src = source
         local NewTable = {}
         for index, data in pairs(AttachedUnits) do
@@ -905,11 +905,11 @@ LoadQBCoreVersion = function()
         end
         return callid, GetPlayerRadio(src)
     end)
-    RPC.register("erp-mdt:removeCall", function(callid)
+    RPC.register("qb-mdt:removeCall", function(callid)
         MDTDispatchData[callid] = nil
         return source, callid
     end)
-    RPC.register("erp-mdt:callAttach", function(callid)
+    RPC.register("qb-mdt:callAttach", function(callid)
         local src = source
         for _, data in pairs(AttachedUnits) do
             if data.CallId == callid then
@@ -924,7 +924,7 @@ LoadQBCoreVersion = function()
         })
         return callid, GetPlayerRadio(src)
     end)
-    RPC.register("erp-mdt:attachedUnits", function(callid)
+    RPC.register("qb-mdt:attachedUnits", function(callid)
         local ReturnData = {}
         for index, data in pairs(AttachedUnits) do
             if data.CallId == callid then
@@ -932,14 +932,14 @@ LoadQBCoreVersion = function()
                 table.insert(ReturnData, {
                     cid = xPlayer.PlayerData.citizenid,
                     job = xPlayer.PlayerData.job.label,
-                    callsign = GetResourceKvpString("erp-mdt:callsign-"..xPlayer.PlayerData.citizenid) or "No Callsign",
+                    callsign = GetResourceKvpString("qb-mdt:callsign-"..xPlayer.PlayerData.citizenid) or "No Callsign",
                     fullname = xPlayer.PlayerData.charinfo.firstname..' '..xPlayer.PlayerData.charinfo.lastname
                 })
             end
         end
         return ReturnData, callid
     end)
-    RPC.register("erp-mdt:callDispatchDetach", function(callid, cid)
+    RPC.register("qb-mdt:callDispatchDetach", function(callid, cid)
         local xPlayer = QBCore.Functions.GetPlayerByCitizenId(tostring(cid))
         for index, data in pairs(AttachedUnits) do
             if data.CallId == callid and data.Source == xPlayer.PlayerData.source then
@@ -947,10 +947,10 @@ LoadQBCoreVersion = function()
             end
         end
     end)
-    RPC.register("erp-mdt:setDispatchWaypoint", function(callid)
+    RPC.register("qb-mdt:setDispatchWaypoint", function(callid)
         return MDTDispatchData[callid]
     end)
-    RPC.register("erp-mdt:callDragAttach", function(callid, cid)
+    RPC.register("qb-mdt:callDragAttach", function(callid, cid)
         local xPlayer = QBCore.Functions.GetPlayerByCitizenId(tostring(cid))
         for _, data in pairs(AttachedUnits) do
             if data.CallId == callid then
@@ -964,7 +964,7 @@ LoadQBCoreVersion = function()
             Source = xPlayer.PlayerData.source
         })
     end)
-    RPC.register("erp-mdt:sendMessage", function(message, time)
+    RPC.register("qb-mdt:sendMessage", function(message, time)
         local src = source
         local xPlayer = QBCore.Functions.GetPlayer(src)
         local ReturnData = {}
@@ -982,15 +982,15 @@ LoadQBCoreVersion = function()
         ReturnData.job = xPlayer.PlayerData.job.name
         return ReturnData
     end)
-    RPC.register("erp-mdt:refreshDispatchMsgs", function()
+    RPC.register("qb-mdt:refreshDispatchMsgs", function()
         return GetAllMessages()
     end)
-    RPC.register("erp-mdt:setWaypoint:unit", function(cid)
+    RPC.register("qb-mdt:setWaypoint:unit", function(cid)
         local xPlayer = QBCore.Functions.GetPlayerByCitizenId(cid)
         local xPlayerCoords = GetEntityCoords(GetPlayerPed(xPlayer.PlayerData.source))
         return xPlayerCoords
     end)
-    RPC.register("erp-mdt:isLimited", function()
+    RPC.register("qb-mdt:isLimited", function()
         local xPlayer = QBCore.Functions.GetPlayer(source)
         for index, policejob in pairs(Config["PoliceJobs"]) do
             for index, emsjob in pairs(Config["EMSJobs"]) do
