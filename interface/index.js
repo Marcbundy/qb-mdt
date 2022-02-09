@@ -195,8 +195,8 @@ $(document).ready(() => {
     });
     $(".associated-incidents-tags-add-btn").on("click", "", function () {
         IncidentSearchType = "person"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
     $(".gallery-add-btn").click(function () {
@@ -750,9 +750,9 @@ $(document).ready(() => {
                 $(".incidents-image-enlarged").css("display", "none");
             }
 
-            if ($(".icidents-person-search-container").css("display") != "none") {
+            if ($(".incidents-person-search-container").css("display") != "none") {
                 shouldClose = false
-                $(".icidents-person-search-container").fadeOut(250);
+                $(".incidents-person-search-container").fadeOut(250);
                 $(".close-all").css("filter", "none");
             }
 
@@ -789,9 +789,9 @@ $(document).ready(() => {
         }
     });
 
-    $(".icidents-person-search-name-input").on("keydown", "", function (e) {
+    $(".incidents-person-search-name-input").on("keydown", "", function (e) {
         if (e.keyCode === 13) {
-            let name = $(".icidents-person-search-name-input").val();
+            let name = $(".incidents-person-search-name-input").val();
             $.post(`https://${GetParentResourceName()}/incidentSearchPerson`, JSON.stringify({
                 name: name
             }));
@@ -810,8 +810,8 @@ $(document).ready(() => {
     
     $(".manage-incidents-officeun-add-btn").click(function () {
         IncidentSearchType = "officer"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
 
@@ -828,8 +828,8 @@ $(document).ready(() => {
 
     $(".manage-incidents-civilians-add-btn").click(function () {
         IncidentSearchType = "civilian"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
 
@@ -1354,8 +1354,8 @@ $(document).ready(() => {
 
     $(".officeun-add-btn").click(function () {
         IncidentSearchType = "bolos_officer"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
 
@@ -1415,9 +1415,9 @@ $(document).ready(() => {
         ]
         openContextMenu(e, args);
     });
-    $(".icidents-person-search-holder").on("click", ".icidents-person-search-item", function () {
+    $(".incidents-person-search-holder").on("click", ".incidents-person-search-item", function () {
         if (IncidentSearchType == "person") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $(".associated-incidents-tags-holder").prepend(
                 `<div class="associated-incidents-tag" data-id="${$(this).data("id")}">${$(this).data("name")}</div>`
@@ -1466,23 +1466,23 @@ $(document).ready(() => {
                 );
             }
         } else if (IncidentSearchType == "officer") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $(".manage-incidents-officeun-holder").append(`<div class="manage-incidents-officers">${$(this).data("name")}</div>`);
         } else if (IncidentSearchType == "civilian") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $(".manage-incidents-civilians-holder").append(`<div class="manage-incidents-civilians">${$(this).data("name")}</div>`);
         } else if (IncidentSearchType == "reports_officer") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $('.reports-officeun-tags-holder').append(`<div class="manage-reports-officers">${$(this).data("name")}</div>`);
         } else if (IncidentSearchType == "reports_civilian") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $('.reports-civilians-tags-holder').append(`<div class="manage-reports-civilians">${$(this).data("name")}</div>`);
         } else if (IncidentSearchType == "bolos_officer") {
-            $(".icidents-person-search-container").fadeOut(250);
+            $(".incidents-person-search-container").fadeOut(250);
             $(".close-all").css("filter", "none");
             $('.manage-officeun-tags-holder').append(`<div class="manage-bolos-officers">${$(this).data("name")}</div>`);
         }
@@ -1665,7 +1665,7 @@ $(document).ready(() => {
             }
         }
     });
-    $('.icidents-person-search-container').hover(function(){ 
+    $('.incidents-person-search-container').hover(function(){ 
         mouse_is_inside=true; 
     }, function(){ 
         mouse_is_inside=false; 
@@ -1809,8 +1809,8 @@ $(document).ready(() => {
 
     $(".reports-officeun-add-btn").click(function () {
         IncidentSearchType = "reports_officer"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
 
@@ -1829,8 +1829,8 @@ $(document).ready(() => {
 
     $(".reports-civilians-add-btn").click(function () {
         IncidentSearchType = "reports_civilian"
-        document.addEventListener('mouseup', onMouseDownIcidents);
-        $(".icidents-person-search-container").fadeIn(250)
+        document.addEventListener('mouseup', onMouseDownIncidents);
+        $(".incidents-person-search-container").fadeIn(250)
         $(".close-all").css("filter", "brightness(15%)");
     });
 
@@ -2858,7 +2858,7 @@ $(document).ready(() => {
             } else {
                 $(".callsign-inner-container").fadeOut(0)
                 $(".callsign-container").fadeOut(0)
-                $(".icidents-person-search-container").fadeOut(0)
+                $(".incidents-person-search-container").fadeOut(0)
                 $(".dispatch-attached-units").fadeOut(0)
                 $(".respond-calls").fadeOut(0)
                 $(".respond-calls-container").fadeOut(0)
@@ -3624,18 +3624,18 @@ $(document).ready(() => {
 
         } else if (e.type == "incidentSearchPerson") {
             let table = e.data
-            $(".icidents-person-search-holder").empty();
+            $(".incidents-person-search-holder").empty();
             $.each(table, function (index, value) {
                 let name = value.firstname + " " + value.lastname
-                $(".icidents-person-search-holder").prepend(
+                $(".incidents-person-search-holder").prepend(
                     `
-                    <div class="icidents-person-search-item" data-info="${name} (#${value.id})" data-cid="${value.id}" data-name="${name}">
-                        <img src="${value.profilepic}" class="icidents-person-search-item-pfp">
-                        <div class="icidents-person-search-item-right">
-                            <div class="icidents-person-search-item-right-cid-title">Citizen ID</div>
-                            <div class="icidents-person-search-item-right-cid-input"><span class="fas fa-id-card"></span> ${value.id}</div>
-                            <div class="icidents-person-search-item-right-name-title">Name</div>
-                            <div class="icidents-person-search-item-right-name-input"><span class="fas fa-user"></span> ${name}</div>
+                    <div class="incidents-person-search-item" data-info="${name} (#${value.id})" data-cid="${value.id}" data-name="${name}">
+                        <img src="${value.profilepic}" class="incidents-person-search-item-pfp">
+                        <div class="incidents-person-search-item-right">
+                            <div class="incidents-person-search-item-right-cid-title">Citizen ID</div>
+                            <div class="incidents-person-search-item-right-cid-input"><span class="fas fa-id-card"></span> ${value.id}</div>
+                            <div class="incidents-person-search-item-right-name-title">Name</div>
+                            <div class="incidents-person-search-item-right-name-input"><span class="fas fa-user"></span> ${name}</div>
                         </div>
                     </div>
                     `
@@ -4184,16 +4184,16 @@ function removeImage(url) {
     }));
 }
 
-function hideIcidentsMenu() {
-    if ($(".icidents-person-search-container").css("display") != "none" && ! mouse_is_inside) {
-        $(".icidents-person-search-container").fadeOut(250);
+function hideIncidentsMenu() {
+    if ($(".incidents-person-search-container").css("display") != "none" && ! mouse_is_inside) {
+        $(".incidents-person-search-container").fadeOut(250);
         $(".close-all").css("filter", "none");
     }
 }
 
-function onMouseDownIcidents(e) {
-    hideIcidentsMenu();
-    document.removeEventListener('mouseup', onMouseDownIcidents);
+function onMouseDownIncidents(e) {
+    hideIncidentsMenu();
+    document.removeEventListener('mouseup', onMouseDownIncidents);
 }
 
 window.addEventListener("load", function(){
