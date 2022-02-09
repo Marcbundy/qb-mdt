@@ -10,6 +10,9 @@ This MDT is work in progress and features may not work properly.
 - [Polyzone](https://github.com/mkafrin/PolyZone)
 - [oxmysql](https://github.com/overextended/oxmysql)
 
+# Dispatch System
+- https://github.com/Project-Sloth/qb-dispatch
+
 # Credit
 
 Original Repo: https://github.com/FlawwsX/erp_mdt
